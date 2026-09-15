@@ -1,0 +1,752 @@
+/* ==========================================================================
+   Design System & CSS Custom Properties
+   Matching spec.md & DESIGN.md for Polaroid Casamento (Iuri & Renata)
+   ========================================================================== */
+
+:root {
+  /* Color Tokens - Light Theme */
+  --bg-canvas: #FFFAEF;
+  --surface-card: #FFFFFF;
+  --surface-container: #F5EEDB;
+  --surface-container-high: #ECE8DD;
+
+  --text-primary: #2A241E;
+  --text-secondary: #6B5E52;
+  --text-muted: #857467;
+
+  --color-primary: #D08841;          /* Warm Terracotta */
+  --color-primary-dark: #B06E2E;
+  --color-secondary: #71A674;        /* Sage Olive */
+  --color-tertiary: #ECB147;         /* Golden Amber */
+  --color-error: #BA1A1A;
+
+  --border-subtle: rgba(42, 36, 30, 0.08);
+  --border-medium: rgba(42, 36, 30, 0.16);
+
+  /* Typography */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-dancing: 'Dancing Script', cursive;
+  --font-caveat: 'Caveat', cursive;
+
+  /* Shadows */
+  --shadow-polaroid: 0 2px 4px rgba(42, 36, 30, 0.04), 0 8px 20px rgba(42, 36, 30, 0.08);
+  --shadow-elevated: 0 12px 32px rgba(42, 36, 30, 0.14), 0 2px 6px rgba(42, 36, 30, 0.06);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}
+
+[data-theme="dark"] {
+  --bg-canvas: #1B1612;
+  --surface-card: #27201A;
+  --surface-container: #332B23;
+  --surface-container-high: #3D352D;
+
+  --text-primary: #F8F2E6;
+  --text-secondary: #B5A899;
+  --text-muted: #8A7E70;
+
+  --color-primary: #E29E5B;
+  --color-primary-dark: #D08841;
+  --color-secondary: #97C59A;
+  --color-tertiary: #F9BC51;
+
+  --border-subtle: rgba(248, 242, 230, 0.10);
+  --border-medium: rgba(248, 242, 230, 0.20);
+
+  --shadow-polaroid: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 1px rgba(248, 242, 230, 0.12);
+  --shadow-elevated: 0 16px 40px rgba(0, 0, 0, 0.65);
+}
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  line-height: 1.5;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 560px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: var(--bg-canvas);
+  padding-bottom: 80px; /* Space for FAB or bottom nav */
+}
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-canvas);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-icon {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+}
+
+.brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.brand-date {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--surface-container);
+  color: var(--color-primary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-left: 0.25rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background-color: var(--surface-container);
+}
+
+.app-nav {
+  display: flex;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-canvas);
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.nav-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Status Toast & Feedback
+   ========================================================================== */
+
+.status-toast {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background-color: var(--surface-container-high);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-elevated);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: 1px solid var(--border-medium);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.status-toast.hidden {
+  display: none;
+}
+
+/* ==========================================================================
+   Main Content Views
+   ========================================================================== */
+
+.app-main {
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+}
+
+.mural-header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mural-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mural-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.mural-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.mural-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.spin {
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Polaroid Card Component
+   ========================================================================== */
+
+.polaroid-frame {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px 12px 16px 12px;
+  box-shadow: var(--shadow-polaroid);
+  width: 100%;
+  max-width: 320px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.polaroid-frame:hover {
+  box-shadow: var(--shadow-elevated);
+}
+
+.polaroid-photo-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #000;
+  overflow: hidden;
+  border-radius: 2px;
+  position: relative;
+}
+
+.polaroid-photo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.polaroid-chin {
+  padding-top: 12px;
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.polaroid-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.polaroid-caption {
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 8px;
+  word-break: break-word;
+}
+
+.polaroid-footer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border-subtle);
+  padding-top: 6px;
+  margin-top: 4px;
+}
+
+/* Color Filters */
+.filter-normal img { filter: none; }
+.filter-bw img { filter: grayscale(100%) contrast(105%); }
+.filter-sepia img { filter: sepia(85%) contrast(95%); }
+.filter-vintage img { filter: sepia(35%) contrast(110%) brightness(105%) saturate(120%); }
+
+/* Font Modifiers */
+.font-playfair { font-family: var(--font-heading); }
+.font-dancing { font-family: var(--font-dancing); font-size: 1.15rem !important; }
+.font-caveat { font-family: var(--font-caveat); font-size: 1.2rem !important; }
+
+/* ==========================================================================
+   Camera View & Editor
+   ========================================================================== */
+
+.camera-card {
+  background-color: var(--surface-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.viewfinder-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #12100e;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1rem;
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
+.camera-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.shutter-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  border: 3px solid var(--bg-canvas);
+  outline: 3px solid var(--color-primary);
+  background-color: var(--color-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform var(--transition-fast);
+}
+
+.shutter-btn:active {
+  transform: scale(0.92);
+}
+
+.shutter-inner {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-full);
+  background-color: #ffffff;
+}
+
+.hidden-input {
+  display: none;
+}
+
+/* Editor Container */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.editor-preview {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.editor-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.editor-controls h3 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Form Controls, Chips & Buttons
+   ========================================================================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-card);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(208, 136, 65, 0.18);
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background-color: var(--surface-container);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.chip.active {
+  background-color: var(--color-secondary);
+  color: #ffffff;
+  border-color: var(--color-secondary);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1.5px solid var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface-container);
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.editor-actions .btn {
+  flex: 1;
+}
+
+/* ==========================================================================
+   Admin Modal & Dashboard
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-card {
+  background-color: var(--bg-canvas);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-medium);
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-elevated);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+}
+
+.modal-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.error-message {
+  color: var(--color-error);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.admin-stat {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.admin-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.admin-thumb-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-thumb-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-thumb-delete {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: rgba(186, 26, 26, 0.85);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.admin-thumb-delete .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* ==========================================================================
+   FAB Button & Helpers
+   ========================================================================== */
+
+.fab-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  box-shadow: var(--shadow-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 90;
+  transition: transform var(--transition-fast);
+}
+
+.fab-btn:active {
+  transform: scale(0.92);
+}
+
+.fab-btn .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.hidden {
+  display: none !important;
+}

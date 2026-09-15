@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Iuri & Renata - 10.10.26 | Polaroid de Casamento</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols Outlined -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- JSZip for Admin Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBzV7vT3VFXVQF0g44PBW1mHUpLUZFpC//22iZULChyJvibzKSrxNkzCsoLwiA9Ydre28g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <span class="material-symbols-outlined brand-icon">photo_camera</span>
+                <h1 class="brand-title">Iuri & Renata</h1>
+                <span class="brand-date">10.10.26</span>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggleBtn" class="icon-btn" title="Alternar Modo Noturno" aria-label="Alternar Modo Noturno">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+                <button id="adminBtn" class="icon-btn" title="Área do Casal" aria-label="Área do Casal">
+                    <span class="material-symbols-outlined">lock</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Navigation Tabs -->
+        <nav class="app-nav">
+            <button class="nav-tab active" data-target="muralView">
+                <span class="material-symbols-outlined">grid_view</span>
+                <span>Mural</span>
+            </button>
+            <button class="nav-tab" data-target="captureView">
+                <span class="material-symbols-outlined">photo_camera</span>
+                <span>Tirar Foto</span>
+            </button>
+        </nav>
+
+        <!-- Status Toast / Connectivity Bar -->
+        <div id="statusToast" class="status-toast hidden">
+            <span class="material-symbols-outlined status-icon">info</span>
+            <span id="statusMessage">Sincronizando...</span>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- VIEW 1: Mural de Fotos -->
+            <section id="muralView" class="view-section active">
+                <div class="mural-header">
+                    <h2>Mural de Memórias</h2>
+                    <p class="mural-subtitle">Compartilhe e reviva cada momento da nossa festa</p>
+                    <button id="refreshMuralBtn" class="btn btn-secondary btn-sm">
+                        <span class="material-symbols-outlined">refresh</span>
+                        Atualizar Mural
+                    </button>
+                </div>
+
+                <div id="muralGrid" class="mural-grid">
+                    <!-- Cards de Polaroid serão inseridos via JavaScript -->
+                    <div id="muralLoading" class="mural-empty">
+                        <span class="material-symbols-outlined spin">progress_activity</span>
+                        <p>Carregando fotos do mural...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: Captura & Personalização da Polaroid -->
+            <section id="captureView" class="view-section">
+                <!-- Step A: Câmera / Upload -->
+                <div id="cameraContainer" class="camera-card">
+                    <div class="viewfinder-wrapper">
+                        <video id="cameraVideo" autoplay playsinline class="camera-video hidden"></video>
+                        <canvas id="snapshotCanvas" class="hidden"></canvas>
+                        <div id="cameraPlaceholder" class="camera-placeholder">
+                            <span class="material-symbols-outlined placeholder-icon">no_photography</span>
+                            <p>Câmera desativada ou não disponível</p>
+                            <label for="fileInput" class="btn btn-primary">
+                                <span class="material-symbols-outlined">upload_file</span>
+                                Escolher da Galeria
+                            </label>
+                            <input type="file" id="fileInput" accept="image/*" capture="environment" class="hidden-input">
+                        </div>
+                    </div>
+
+                    <div class="camera-controls">
+                        <button id="switchCameraBtn" class="icon-btn hidden" title="Alternar Câmera">
+                            <span class="material-symbols-outlined">flip_camera_ios</span>
+                        </button>
+                        <button id="shutterBtn" class="shutter-btn hidden" title="Tirar Foto">
+                            <span class="shutter-inner"></span>
+                        </button>
+                        <label for="fileInputAlt" class="icon-btn" title="Galeria">
+                            <span class="material-symbols-outlined">photo_library</span>
+                        </label>
+                        <input type="file" id="fileInputAlt" accept="image/*" capture="environment" class="hidden-input">
+                    </div>
+                </div>
+
+                <!-- Step B: Editor Polaroid -->
+                <div id="editorContainer" class="editor-container hidden">
+                    <div class="editor-preview">
+                        <!-- Card Polaroid Interativo -->
+                        <div id="polaroidCard" class="polaroid-frame filter-normal">
+                            <div class="polaroid-photo-wrapper">
+                                <img id="polaroidImg" src="" alt="Sua foto polaroid">
+                            </div>
+                            <div class="polaroid-chin">
+                                <div id="polaroidTitle" class="polaroid-title font-playfair">Iuri & Renata - 10.10.26</div>
+                                <div id="polaroidCaptionText" class="polaroid-caption font-playfair"></div>
+                                <div class="polaroid-footer-meta">
+                                    <span id="polaroidAuthor" class="polaroid-author">Convidado</span>
+                                    <span class="polaroid-date">10/10/2026</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modificadores da Polaroid -->
+                    <div class="editor-controls">
+                        <h3>Personalize sua Polaroid</h3>
+
+                        <!-- Nome / Assinatura do Convidado -->
+                        <div class="form-group">
+                            <label for="authorInput">Seu Nome / De quem é a foto?</label>
+                            <input type="text" id="authorInput" placeholder="Ex: Maria & João" maxlength="30" class="form-control">
+                        </div>
+
+                        <!-- Legenda Personalizada -->
+                        <div class="form-group">
+                            <label for="captionInput">Mensagem ou Legenda</label>
+                            <input type="text" id="captionInput" placeholder="Ex: Muita felicidade ao casal!" maxlength="60" class="form-control">
+                        </div>
+
+                        <!-- Filtros de Cor -->
+                        <div class="form-group">
+                            <label>Filtro da Foto</label>
+                            <div class="chip-group">
+                                <button type="button" class="chip active" data-filter="filter-normal">Original</button>
+                                <button type="button" class="chip" data-filter="filter-bw">Preto & Branco</button>
+                                <button type="button" class="chip" data-filter="filter-sepia">Sépia</button>
+                                <button type="button" class="chip" data-filter="filter-vintage">Vintage Warm</button>
+                            </div>
+                        </div>
+
+                        <!-- Estilo de Fonte da Legenda -->
+                        <div class="form-group">
+                            <label>Fonte da Legenda</label>
+                            <div class="chip-group">
+                                <button type="button" class="chip active" data-font="font-playfair">Serifa Elegante</button>
+                                <button type="button" class="chip" data-font="font-dancing">Cursiva Romântica</button>
+                                <button type="button" class="chip" data-font="font-caveat">Manuscrito</button>
+                            </div>
+                        </div>
+
+                        <!-- Ações do Editor -->
+                        <div class="editor-actions">
+                            <button id="retakeBtn" class="btn btn-secondary">
+                                <span class="material-symbols-outlined">restart_alt</span>
+                                Refazer
+                            </button>
+                            <button id="publishBtn" class="btn btn-primary">
+                                <span class="material-symbols-outlined">publish</span>
+                                Revelar & Publicar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal Admin do Casal -->
+        <div id="adminModal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2>Área do Casal</h2>
+                    <button id="closeAdminModalBtn" class="icon-btn">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- Admin Auth Form -->
+                <div id="adminAuthSection" class="modal-body">
+                    <p>Digite a senha do casal para gerenciar as fotos do evento.</p>
+                    <div class="form-group">
+                        <input type="password" id="adminPasswordInput" placeholder="Senha de acesso" class="form-control">
+                        <div id="adminAuthError" class="error-message hidden">Senha incorreta. Tente novamente.</div>
+                    </div>
+                    <button id="adminLoginBtn" class="btn btn-primary btn-full">Acessar Painel</button>
+                </div>
+
+                <!-- Admin Dashboard Section -->
+                <div id="adminDashboardSection" class="modal-body hidden">
+                    <div class="admin-toolbar">
+                        <span id="adminPhotoCount" class="admin-stat">0 foto(s) cadastradas</span>
+                        <button id="downloadZipBtn" class="btn btn-secondary btn-sm">
+                            <span class="material-symbols-outlined">download_for_offline</span>
+                            Baixar Fotos (ZIP)
+                        </button>
+                    </div>
+
+                    <div id="adminPhotoGrid" class="admin-photo-grid">
+                        <!-- Thumbnails de fotos admin serão inseridas via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button para Câmera Rápida no Mural -->
+        <button id="fabCameraBtn" class="fab-btn" title="Tirar Foto">
+            <span class="material-symbols-outlined">photo_camera</span>
+        </button>
+    </div>
+
+    <!-- Firebase Centralized Config & SDKs -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/db.js"></script>
+    <script type="module" src="js/offline.js"></script>
+    <script type="module" src="js/camera.js"></script>
+    <script type="module" src="js/editor.js"></script>
+    <script type="module" src="js/mural.js"></script>
+    <script type="module" src="js/admin.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
