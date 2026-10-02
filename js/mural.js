@@ -3,7 +3,7 @@
  * Renderiza o feed acumulativo de fotos em formato Polaroid com leve rotação artesanal.
  */
 
-import { subscribeToMural } from './db.js';
+import { subscribeToMural } from './db-supabase.js';
 
 export function initMural(gridElement, refreshBtnElement) {
   let currentPhotos = [];
