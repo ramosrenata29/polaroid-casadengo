@@ -8,7 +8,7 @@ import { initEditorControls } from './editor.js';
 import { initMural } from './mural.js';
 import { initAdminPanel } from './admin.js';
 import { initOfflineSync } from './offline.js';
-import { savePhoto } from './db.js';
+import { savePhoto } from './db-supabase.js;
 
 document.addEventListener('DOMContentLoaded', () => {
   // Configuração do Tema Noturno (Dark Mode)
