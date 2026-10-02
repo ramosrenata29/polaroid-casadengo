@@ -4,7 +4,7 @@
  * e download em lote de todas as fotos em formato ZIP usando JSZip.
  */
 
-import { deletePhoto } from './db.js';
+import { deletePhoto } from './db-supabase.js';
 import { showToast } from './app.js';
 
 const DEFAULT_ADMIN_PASS = 'casamento2026';
